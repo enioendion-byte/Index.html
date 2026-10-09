@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabalho de Estatística - Medidas Descritivas</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; color: #333; }
+        .container { max-width: 500px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 0 auto; }
+        h2, h3 { text-align: center; color: #0056b3; margin-top: 0; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        input[type="text"] { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px; font-size: 16px; }
+        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #218838; }
+        .results { margin-top: 20px; background: #e9ecef; padding: 15px; border-radius: 4px; font-size: 15px; }
+        .results p { margin: 8px 0; border-bottom: 1px solid #dee2e6; padding-bottom: 4px; }
+        .results p:last-child { border: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Programa Medidas Descritivas</h2>
+    <h3>Estatística - UniBrasil</h3>
+    <label for="dados">Insira os valores (separados por vírgula ou espaço):</label>
+    <input type="text" id="dados" placeholder="Ex: 10, 20, 30, 40">
+    <button onclick="calcularEstatísticas()">Calcular Resultados</button>
+    <div class="results" id="painelResultados" style="display:none;">
+        <p><strong>Média Aritmética:</strong> <span id="resMedia"></span></p>
+        <p><strong>Mediana:</strong> <span id="resMediana"></span></p>
+        <p><strong>Variância Amostral:</strong> <span id="resVariancia"></span></p>
+        <p><strong>Desvio Padrão:</strong> <span id="resDesvio"></span></p>
+        <p><strong>Coeficiente de Variação:</strong> <span id="resCV"></span></p>
+        <p><strong>Classificação do Conjunto:</strong> <span id="resClassificacao"></span></p>
+    </div>
+</div>
+<script>
+function calcularEstatísticas() {
+    const input = document.getElementById('dados').value;
+    const numeros = input.split(/[,\s]+/).map(Number).filter(n => !isNaN(n));
+    if (numeros.length < 2) {
+        alert("Por favor, insira pelo menos 2 números para calcular as estatísticas.");
+        return;
+    }
+    const soma = numeros.reduce((a, b) => a + b, 0);
+    const media = soma / numeros.length;
+    const ordenados = [...numeros].sort((a, b) => a - b);
+    const meio = Math.floor(ordenados.length / 2);
+    let mediana = ordenados.length % 2 !== 0 ? ordenados[meio] : (ordenados[meio - 1] + ordenados[meio]) / 2;
+    const somaQuadradosDiferencas = numeros.reduce((a, b) => a + Math.pow(b - media, 2), 0);
+    const varianciaAmostral = somaQuadradosDiferencas / (numeros.length - 1);
+    const desvioPadrao = Math.sqrt(varianciaAmostral);
+    const coeficienteVariacao = (desvioPadrao / media) * 100;
+    const classificacao = coeficienteVariacao <= 30 ? "Homogêneo (CV ≤ 30%)" : "Heterogêneo (CV > 30%)";
+    document.getElementById('resMedia').innerText = media.toFixed(2);
+    document.getElementById('resMediana').innerText = mediana.toFixed(2);
+    document.getElementById('resVariancia').innerText = varianciaAmostral.toFixed(2);
+    document.getElementById('resDesvio').innerText = desvioPadrao.toFixed(2);
+    document.getElementById('resCV').innerText = coeficienteVariacao.toFixed(2) + "%";
+    document.getElementById('resClassificacao').innerText = classificacao;
+    document.getElementById('painelResultados').style.display = 'block';
+}
+</script>
+</body>
+</html>
