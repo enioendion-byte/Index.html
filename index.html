@@ -37,7 +37,7 @@
 function calcularEstatísticas() {
     const input = document.getElementById('dados').value;
     const numeros = input.split(/[,\s]+/).map(Number).filter(n => !isNaN(n));
-    if (numeros.length < 2) {
+    if (numeros.length < 6) {
         alert("Por favor, insira pelo menos 6 números para calcular as estatísticas.");
         return;
     }
